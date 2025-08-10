@@ -1,0 +1,24 @@
+{
+  "name": "codespaces-flask",
+  "version": "1.0.0",
+  "description": "Welcome to your shiny new Codespace running Flask! We've got everything fired up and running for you to explore Flask.",
+  "main": "index.js",
+  "scripts": {
+    "test":     "jest",
+    "test:watch": "jest --watch",
+    "e2e":      "cypress open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-env": "^7.28.0",
+    "cypress": "^14.5.4",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5"
+  }
+
+  
+}
+
+
