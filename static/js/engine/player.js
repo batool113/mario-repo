@@ -7,7 +7,7 @@ class Player extends BaseEntity {
         super(x, y, 32, 32);
         this.input = input;
         this.speed = 200; // pixels per second
-        this.jumpForce = -400;
+        this.jumpForce = -600;
         this.friction = 0.8;
         this.isGrounded = false;
     }
