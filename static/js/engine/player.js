@@ -1,7 +1,8 @@
 
-const Entity = require('./entity.js');
+// Node.js support or Browser fallback
+const BaseEntity = (typeof Entity !== 'undefined') ? Entity : require('./entity.js');
 
-class Player extends Entity {
+class Player extends BaseEntity {
     constructor(x, y, input) {
         super(x, y, 32, 32);
         this.input = input;
@@ -32,4 +33,6 @@ class Player extends Entity {
     }
 }
 
-module.exports = Player;
+if (typeof module !== 'undefined') {
+    module.exports = Player;
+}

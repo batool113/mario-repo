@@ -42,4 +42,6 @@ class Physics {
     }
 }
 
-module.exports = Physics;
+if (typeof module !== 'undefined') {
+    module.exports = Physics;
+}

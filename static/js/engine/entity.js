@@ -14,4 +14,6 @@ class Entity {
     }
 }
 
-module.exports = Entity;
+if (typeof module !== 'undefined') {
+    module.exports = Entity;
+}

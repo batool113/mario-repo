@@ -16,4 +16,6 @@ class Input {
     }
 }
 
-module.exports = Input;
+if (typeof module !== 'undefined') {
+    module.exports = Input;
+}

@@ -1,15 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
+
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    
-    <script src="{{ url_for('static', filename='js/engine/gameloop.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <div id="errorLog"
+        style="position: absolute; top: 0; left: 0; color: red; background: rgba(0,0,0,0.8); padding: 10px; display: none;">
+    </div>
+    <script>
+        window.onerror = function (msg, url, line, col, error) {
+            const log = document.getElementById('errorLog');
+            log.style.display = 'block';
+            log.innerHTML += `<div>Error: ${msg} <br> at ${url}:${line}:${col}</div>`;
+            return false;
+        };
+    </script>
+
+    <script src="{{ url_for('static', filename='js/engine/entity.js') }}?v=4"></script>
+    <script src="{{ url_for('static', filename='js/engine/physics.js') }}?v=4"></script>
+    <script src="{{ url_for('static', filename='js/engine/input.js') }}?v=4"></script>
+    <script src="{{ url_for('static', filename='js/engine/level.js') }}?v=4"></script>
+    <script src="{{ url_for('static', filename='js/engine/player.js') }}?v=4"></script>
+    <script src="{{ url_for('static', filename='js/engine/gameloop.js') }}?v=4"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=4"></script>
 </body>
+
 </html>
