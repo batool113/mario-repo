@@ -101,7 +101,7 @@ class GameLoop {
                         this.physics.resolveCollision(this.player, obstacle);
 
                         // Check if grounded (collision was below player)
-                        if (this.player.y + this.player.height === obstacle.y) {
+                        if (Math.abs((this.player.y + this.player.height) - obstacle.y) < 0.1) {
                             this.player.isGrounded = true;
                         }
                     }
