@@ -1,8 +1,9 @@
 
 // Node.js support or Browser fallback
-const BaseEntity = (typeof Entity !== 'undefined') ? Entity : require('./entity.js');
+// Node.js support or Browser fallback
+const PlayerBase = (typeof Entity !== 'undefined') ? Entity : require('./entity.js');
 
-class Player extends BaseEntity {
+class Player extends PlayerBase {
     constructor(x, y, input) {
         super(x, y, 32, 32);
         this.input = input;

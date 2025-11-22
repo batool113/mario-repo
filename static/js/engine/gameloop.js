@@ -12,6 +12,7 @@ class GameLoop {
         this.input = new Input();
         this.level = new Level(32);
         this.player = new Player(100, 100, this.input);
+        this.goombas = [new Goomba(400, 100)];
 
         // Simple test level
         const map = [];
@@ -66,6 +67,31 @@ class GameLoop {
         // Update Player (Movement & Input)
         this.player.update(dt);
 
+        // Update Goombas
+        this.goombas.forEach(goomba => {
+            if (goomba.isDead) return;
+
+            this.physics.applyGravity(goomba, dt);
+            goomba.update(dt);
+
+            // Goomba-Level Collision
+            this.checkEntityLevelCollision(goomba);
+
+            // Player-Goomba Collision
+            if (this.physics.checkCollision(this.player, goomba)) {
+                // Stomp check: Player falling and above Goomba center
+                if (this.player.velY > 0 && this.player.y + this.player.height < goomba.y + goomba.height * 0.8) {
+                    goomba.stomp();
+                    this.player.velY = -300; // Bounce
+                } else {
+                    // Kill Player (Reset)
+                    this.player.x = 100;
+                    this.player.y = 100;
+                    this.player.velY = 0;
+                }
+            }
+        });
+
         // Collision Detection & Resolution
         // 1. Check Level Collisions
         this.checkLevelCollisions();
@@ -76,6 +102,38 @@ class GameLoop {
             this.player.x = 100;
             this.player.y = 100;
             this.player.velY = 0;
+        }
+    }
+
+    checkEntityLevelCollision(entity) {
+        const startCol = Math.floor(entity.x / this.level.tileSize);
+        const endCol = Math.floor((entity.x + entity.width) / this.level.tileSize);
+        const startRow = Math.floor(entity.y / this.level.tileSize);
+        const endRow = Math.floor((entity.y + entity.height) / this.level.tileSize);
+
+        for (let r = startRow; r <= endRow; r++) {
+            for (let c = startCol; c <= endCol; c++) {
+                if (this.level.isSolid(c * this.level.tileSize, r * this.level.tileSize)) {
+                    const obstacle = {
+                        x: c * this.level.tileSize,
+                        y: r * this.level.tileSize,
+                        width: this.level.tileSize,
+                        height: this.level.tileSize
+                    };
+
+                    if (this.physics.checkCollision(entity, obstacle)) {
+                        this.physics.resolveCollision(entity, obstacle);
+
+                        // Simple wall bounce logic for Goomba
+                        if (entity instanceof Goomba) {
+                            // Check horizontal collision
+                            if (entity.x < obstacle.x || entity.x > obstacle.x) {
+                                entity.resolveCollision(obstacle, 'left'); // Side doesn't matter much for simple reverse
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -134,16 +192,23 @@ class GameLoop {
                     }
                 }
             }
-        } else {
-            console.error("Level map missing!");
         }
+
+        // Render Goombas
+        this.ctx.fillStyle = 'brown';
+        this.goombas.forEach(goomba => {
+            if (!goomba.isDead) {
+                this.ctx.fillRect(goomba.x, goomba.y, goomba.width, goomba.height);
+            } else {
+                // Flattened Goomba
+                this.ctx.fillRect(goomba.x, goomba.y + 20, goomba.width, 12);
+            }
+        });
 
         // Render Player
         if (this.player) {
             this.ctx.fillStyle = 'red';
             this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
-        } else {
-            console.error("Player missing!");
         }
     }
 }
